@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kervan Lokantası - Masa QR Standları Yazdırma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 24px;
+    }
+
+    .no-print-toolbar {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      background: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-left h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #c2410c;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      background: #c2410c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: #0f172a;
+    }
+
+    .print-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .table-stand-card {
+      background: white;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      page-break-inside: avoid;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      min-height: 400px;
+    }
+
+    .card-logo-area {
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: #9a3412;
+      text-transform: uppercase;
+    }
+
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .table-number-box {
+      background: #c2410c;
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 800;
+      padding: 6px 20px;
+      border-radius: 30px;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .qr-img {
+      width: 170px;
+      height: 170px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 6px;
+      background: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .scan-prompt {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .scan-subtext {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-bottom: 14px;
+    }
+
+    .card-footer {
+      width: 100%;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.78rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .no-print-toolbar {
+        display: none !important;
+      }
+      .print-grid {
+        max-width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      .table-stand-card {
+        box-shadow: none;
+        border: 1.5px dashed #94a3b8;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print-toolbar">
+    <div class="toolbar-left">
+      <h1>Kervan Lokantası - Masa QR Standları</h1>
+      <p style="font-size:0.85rem; color:#64748b;">Müşterilerin cep telefonlarından açabilmesi için canlı web sitesi adresinizi yazıp yazdırın.</p>
+    </div>
+    <div class="toolbar-controls">
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <label style="font-size:0.75rem; font-weight:700; color:#475569;">Web Sitesi Adresiniz (URL):</label>
+        <input type="text" id="customUrlInput" placeholder="https://kervan-lokantasi.vercel.app" style="padding:6px 10px; width:260px; border-radius:6px; border:1.5px solid #cbd5e1; font-size:0.85rem;" oninput="renderCards()">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:2px;">
+        <label style="font-size:0.75rem; font-weight:700; color:#475569;">Masa Sayısı:</label>
+        <input type="number" id="tableCountInput" value="12" min="1" max="50" style="padding:6px 10px; width:65px; border-radius:6px; border:1.5px solid #cbd5e1; font-weight:700; font-size:0.85rem;" onchange="renderCards()">
+      </div>
+      <button class="btn btn-secondary" onclick="window.location.href='index.html'">Menüye Dön</button>
+      <button class="btn" onclick="window.print()">🖨️ Yazdır (Ctrl+P)</button>
+    </div>
+  </div>
+
+  <div class="print-grid" id="printGrid">
+    <!-- Generated dynamically -->
+  </div>
+
+  <script>
+    function renderCards() {
+      const count = parseInt(document.getElementById('tableCountInput').value) || 12;
+      const grid = document.getElementById('printGrid');
+      grid.innerHTML = '';
+
+      let baseUrl = document.getElementById('customUrlInput')?.value?.trim();
+      if (!baseUrl) {
+        baseUrl = window.location.href.replace('print-qr.html', 'index.html').split('?')[0];
+      }
+
+      const separator = baseUrl.includes('?') ? '&' : '?';
+
+      for (let i = 1; i <= count; i++) {
+        const targetUrl = `${baseUrl}${separator}table=${i}`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(targetUrl)}`;
+
+        const card = document.createElement('div');
+        card.className = 'table-stand-card';
+        card.innerHTML = `
+          <div class="card-logo-area">
+            <div style="font-size: 1.3rem;">🐪 🐪 🐪</div>
+            <div class="card-title">KERVAN LOKANTASI</div>
+            <div class="card-subtitle">Geleneksel Safranbolu & Türk Mutfağı</div>
+            <div class="table-number-box">MASA ${i}</div>
+          </div>
+
+          <img class="qr-img" src="${qrUrl}" alt="Masa ${i} QR Kodu">
+
+          <div>
+            <div class="scan-prompt">📸 Menü İçin Kameranızla Okutun</div>
+            <div class="scan-subtext">Akıllı telefon kameranızı QR koda doğru tutun</div>
+          </div>
+
+          <div class="card-footer">
+            <div>✨ <strong>Afiyet Olsun!</strong></div>
+            <div>📞 <strong>0544 725 22 77</strong></div>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    }
+
+    window.onload = renderCards;
+  </script>
+</body>
+</html>

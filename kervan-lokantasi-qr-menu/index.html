@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#c2410c">
+  <meta name="description" content="Kervan Lokantası Dijital QR Menü - Geleneksel Safranbolu ve Türk Mutfağı">
+  <title>Kervan Lokantası | Dijital QR Menü</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Top Sticky Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <div class="brand-mini-badge">
+          <span>🐪</span>
+          <strong>KERVAN LOKANTASI</strong>
+        </div>
+      </div>
+      <div class="top-bar-actions">
+        <button class="icon-btn lang-switch" id="langToggleBtn" onclick="toggleLanguage()" title="Dili Değiştir">
+          EN
+        </button>
+        <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Karanlık / Aydınlık Mod">
+          🌙
+        </button>
+        <button class="icon-btn" onclick="openQRModal()" title="Masa QR Kodu Üret">
+          📱
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Header Banner with Caravan Motif -->
+    <div class="hero-header">
+      <div class="caravan-silhouette">
+        <!-- SVG Caravan Silhouette -->
+        <svg class="caravan-svg" viewBox="0 0 320 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="55" cy="22" r="5"/>
+          <path d="M50,48 L53,30 Q58,24 64,28 Q70,33 76,28 Q82,24 88,30 L90,48" stroke="#fff7ed" stroke-width="3" fill="none"/>
+          <circle cx="105" cy="22" r="5"/>
+          <path d="M100,48 L103,30 Q108,24 114,28 Q120,33 126,28 Q132,24 138,30 L140,48" stroke="#fff7ed" stroke-width="3" fill="none"/>
+          <circle cx="155" cy="22" r="5"/>
+          <path d="M150,48 L153,30 Q158,24 164,28 Q170,33 176,28 Q182,24 188,30 L190,48" stroke="#fff7ed" stroke-width="3" fill="none"/>
+          <circle cx="205" cy="22" r="5"/>
+          <path d="M200,48 L203,30 Q208,24 214,28 Q220,33 226,28 Q232,24 238,30 L240,48" stroke="#fff7ed" stroke-width="3" fill="none"/>
+          <circle cx="255" cy="22" r="5"/>
+          <path d="M250,48 L253,30 Q258,24 264,28 Q270,33 276,28 Q282,24 288,30 L290,48" stroke="#fff7ed" stroke-width="3" fill="none"/>
+          <path d="M0,52 Q80,49 160,52 T320,52" stroke="#fff7ed" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">KERVAN LOKANTASI</h1>
+      <p class="hero-tagline" id="heroTagline">Geleneksel Safranbolu & Türk Mutfağı</p>
+
+      <div class="hero-quick-info">
+        <button class="quick-pill" onclick="callWaiter()">
+          🔔 <span id="callWaiterText">Garson Çağır</span>
+        </button>
+        <a class="quick-pill" href="tel:05447252277">
+          📞 0544 725 22 77
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Search Section -->
+    <div class="search-section">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Yemek veya çorba ara..." autocomplete="off">
+        <button id="searchClear" class="search-clear">✕</button>
+      </div>
+    </div>
+
+    <!-- Sticky Category Navigation Bar -->
+    <div class="category-nav-wrapper">
+      <div class="category-nav-scroll" id="categoryNavScroll">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+
+    <!-- Dietary Filter Pills Bar -->
+    <div class="filter-pills-bar" id="filterPillsBar">
+      <!-- Rendered by app.js -->
+    </div>
+
+    <!-- Menu Items Container -->
+    <main id="menuContainer">
+      <!-- Dynamically filled with dishes -->
+    </main>
+
+    <!-- Restaurant Info & Location Footer -->
+    <section class="info-footer-section">
+      <div class="restaurant-info-card">
+        <div class="info-row">
+          <span>📍</span>
+          <div>
+            <strong>Adres</strong>
+            <div>Barış Mah. Marangozlar Sanayi Sitesi, Safranbolu / Karabük</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span>📞</span>
+          <div>
+            <strong>Telefon</strong>
+            <div>0544 725 22 77</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span>⏰</span>
+          <div>
+            <strong id="hoursTitleText">Çalışma Saatleri</strong>
+            <div id="hoursValText">Hergün: 08:00 - 18:30</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <a href="print-qr.html" target="_blank" class="quick-pill" style="color: var(--primary); background: var(--primary-light); border-color: rgba(194,65,12,0.3);">
+          🖨️ Masa QR Standlarını Yazdır (A4 Şablonu)
+        </a>
+      </div>
+
+      <p class="footer-tax-note" id="taxNoteText">
+        Fiyatlarımıza KDV dahildir • Fiyat Güncelleme Tarihi: 17.08.2026
+      </p>
+    </section>
+
+  </div><!-- /app-container -->
+
+  <!-- Floating Bottom Order Bar -->
+  <div class="bottom-order-bar" id="bottomOrderBar">
+    <div class="order-bar-inner" onclick="toggleCartDrawer(true)">
+      <div class="order-bar-left">
+        <div class="order-counter-badge" id="bottomBarBadge">0</div>
+        <div class="order-bar-info">
+          <span class="order-bar-title" id="bottomBarTitle">Sipariş Listem</span>
+          <span class="order-bar-total" id="bottomBarTotal">0 ₺</span>
+        </div>
+      </div>
+      <button class="order-bar-btn">
+        <span id="bottomBarBtnText">Siparişi Gör</span> ➔
+      </button>
+    </div>
+  </div>
+
+  <!-- Item Detail Modal -->
+  <div class="modal-overlay" id="itemModal">
+    <div class="drawer-content">
+      <div class="drawer-drag-handle"></div>
+      <div class="drawer-header">
+        <h3 class="drawer-title" id="modalItemTitle">Yemek Adı</h3>
+        <button class="drawer-close" onclick="closeItemModal()">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="detail-price-row">
+          <span class="detail-price" id="modalItemPrice">0 ₺</span>
+        </div>
+        <div class="meta-tags-list" id="modalMetaTags"></div>
+        <p id="modalItemDesc" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 12px 0;"></p>
+        
+        <div class="qty-control-row">
+          <span style="font-weight: 700;">Adet:</span>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <button class="qty-btn" onclick="changeModalQty(-1)">-</button>
+            <span class="qty-value" id="modalQtyVal">1</span>
+            <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="primary-btn" onclick="confirmModalAddToCart()">
+          <span id="modalAddBtnText">Siparişe Ekle</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart / Order Tray Modal Drawer -->
+  <div class="modal-overlay" id="cartDrawerModal">
+    <div class="drawer-content">
+      <div class="drawer-drag-handle"></div>
+      <div class="drawer-header">
+        <h3 class="drawer-title" id="cartDrawerTitle">Sipariş Listem</h3>
+        <div style="display:flex; gap:8px;">
+          <button class="icon-btn" style="width:30px;height:30px;font-size:0.8rem;" onclick="clearCart()" title="Listeyi Temizle">🗑️</button>
+          <button class="drawer-close" onclick="toggleCartDrawer(false)">✕</button>
+        </div>
+      </div>
+      <div class="drawer-body">
+        <div class="cart-items-list" id="cartItemsList"></div>
+      </div>
+      <div class="drawer-footer">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span style="font-weight:700; color:var(--text-muted);">Toplam Hesap:</span>
+          <span style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="cartDrawerTotal">0 ₺</span>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <button class="primary-btn" style="background:#1e293b;" onclick="showWaiterMode()">
+            📋 Garsona Göster
+          </button>
+          <button class="primary-btn" style="background:#16a34a;" onclick="sendOrderViaWhatsApp()">
+            💬 WhatsApp İlet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Generator Modal -->
+  <div class="modal-overlay center-modal" id="qrModal">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3 class="drawer-title">Masa QR Kodu Üretici</h3>
+        <button class="drawer-close" onclick="closeQRModal()">✕</button>
+      </div>
+      <div class="drawer-body" style="text-align: center;">
+        <div style="background:#fef3c7; border:1px solid #fde68a; color:#92400e; padding:10px 14px; border-radius:10px; font-size:0.8rem; text-align:left; margin-bottom:14px;">
+          💡 <strong>Önemli Not:</strong> Müşterilerin cep telefonlarından açabilmesi için menünün internete yüklü olması (veya canlı web adresinizin girilmiş olması) gerekir.
+        </div>
+
+        <div style="margin-bottom:12px; text-align:left;">
+          <label style="font-weight:700; font-size:0.82rem; color:var(--text-muted); display:block; margin-bottom:4px;">Web Sitesi Bağlantısı (URL):</label>
+          <input type="text" id="qrCustomUrlInput" placeholder="https://kervan-lokantasi.vercel.app" style="width:100%; padding:8px 12px; border-radius:8px; border:1.5px solid var(--border-color); font-size:0.85rem;" oninput="generateTableQR()">
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px;">
+          <label style="font-weight:700; font-size:0.9rem;">Masa No:</label>
+          <input type="number" id="qrTableInput" value="1" min="1" max="100" style="width:70px; padding:6px 10px; border-radius:8px; border:1px solid var(--border-color); font-weight:800; font-size:1rem; text-align:center;" onchange="generateTableQR()">
+        </div>
+
+        <div class="qr-code-box">
+          <div id="qrCanvasContainer"></div>
+          <div style="font-weight:800; font-size:1.1rem; color:#c2410c; margin-top:6px;">KERVAN LOKANTASI</div>
+          <div style="font-size:0.75rem; color:#64748b; word-break:break-all; max-width:260px;" id="qrTargetUrl"></div>
+        </div>
+
+        <a href="print-qr.html" target="_blank" class="primary-btn" style="text-decoration:none; margin-top:8px;">
+          🖨️ Toplu Masa Standı Yazdır (A4)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-msg" id="toastMsg">
+    🔔 Garsonunuz Masanıza Yönlendirildi!
+  </div>
+
+  <!-- Scripts -->
+  <script src="menu-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
